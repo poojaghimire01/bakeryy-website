@@ -1,0 +1,341 @@
+Perfect, let's start building. For your class demo, we will build **Version 1 - Working Prototype** with simple technology that you can run without any installation.
+
+**Tech we will use now:** HTML + CSS + JavaScript + LocalStorage (as database). Later we can shift to React + Firebase.
+
+What you will get today: Home + Menu + Offers + Cake Customizer + Cart + Checkout + Order Tracking + Admin Dashboard - all in 1 website.
+
+### Step 1: Create the website in 2 minutes
+
+1. Create a folder on your laptop named `bakery-website`
+2. Open VS Code > New File > Save as `index.html` inside that folder
+3. Copy-paste the full code below into it
+4. Double-click the file to open in Chrome. Done!
+
+Copy this entire code:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BakeEase - Bakery Promotion & Order Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+:root{--brown:#4E342E;--pink:#FF6B8B;--gold:#FFB84D;--cream:#FFF8F0;--green:#2e7d32}
+body{background:var(--cream);color:#333}
+header{position:sticky;top:0;z-index:100;background:#fff;display:flex;justify-content:space-between;align-items:center;padding:12px 30px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+.logo{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--brown)}
+.logo span{color:var(--pink)}
+nav a{margin:0 12px;text-decoration:none;color:var(--brown);font-weight:500;cursor:pointer}
+nav a:hover{color:var(--pink)}
+.btn{background:var(--pink);color:#fff;border:none;padding:10px 22px;border-radius:25px;cursor:pointer;font-weight:600}
+.btn:hover{background:#e05576}
+.btn-gold{background:var(--gold);color:var(--brown)}
+.hero{display:flex;flex-wrap:wrap;align-items:center;padding:50px 30px;gap:30px;background:linear-gradient(to right,#FFF8F0,#FFE9D6)}
+.hero-text{flex:1;min-width:280px}
+.hero-text h1{font-family:'Playfair Display',serif;font-size:48px;color:var(--brown);line-height:1.1}
+.hero-text h1 span{color:var(--pink)}
+.hero-text p{margin:15px 0;color:#666}
+.hero-img{flex:1;min-width:280px}
+.hero-img img{width:100%;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.badges{display:flex;gap:15px;margin-top:20px;flex-wrap:wrap}
+.badge{background:#fff;padding:8px 16px;border-radius:20px;font-size:13px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.section{padding:50px 30px;max-width:1200px;margin:auto}
+.section h2{font-family:'Playfair Display',serif;font-size:32px;color:var(--brown);text-align:center;margin-bottom:10px}
+.sub{text-align:center;color:#777;margin-bottom:30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.card{background:#fff;border-radius:15px;overflow:hidden;box-shadow:0 4px 15px rgba(0,0,0,.08);position:relative}
+.card img{width:100%;height:180px;object-fit:cover}
+.card-body{padding:15px}
+.card-body h3{font-size:17px;color:var(--brown)}
+.price{color:var(--green);font-weight:700;margin:5px 0}
+.tag{position:absolute;top:10px;left:10px;background:var(--gold);font-size:11px;padding:4px 10px;border-radius:15px;font-weight:600}
+.offer-box{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.offer{background:linear-gradient(135deg,#4E342E,#7b5a52);color:#fff;padding:25px;border-radius:15px;text-align:center}
+.offer:nth-child(2){background:linear-gradient(135deg,#FF6B8B,#ff9eb5)}
+.offer h3{font-size:22px;margin-bottom:5px}
+.offer code{background:rgba(255,255,255,.2);padding:5px 12px;border-radius:8px;display:inline-block;margin:10px 0;font-weight:700;letter-spacing:1px}
+.custom-box{background:#fff;padding:30px;border-radius:20px;display:flex;flex-wrap:wrap;gap:30px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.custom-form{flex:1;min-width:260px}
+.custom-form label{font-weight:600;font-size:14px;display:block;margin:12px 0 5px}
+.custom-form select,.custom-form input{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px}
+.preview{flex:1;min-width:260px;background:var(--cream);border-radius:15px;padding:25px;text-align:center}
+.preview h3{font-family:'Playfair Display',serif;color:var(--brown)}
+#customPrice{font-size:32px;color:var(--pink);font-weight:700;margin:15px 0}
+/* Cart */
+#cartSidebar{position:fixed;top:0;right:-400px;width:360px;max-width:90%;height:100%;background:#fff;box-shadow:-5px 0 20px rgba(0,0,0,.15);transition:.3s;z-index:200;display:flex;flex-direction:column}
+#cartSidebar.open{right:0}
+.cart-head{padding:18px;background:var(--brown);color:#fff;display:flex;justify-content:space-between;align-items:center}
+.cart-items{flex:1;overflow:auto;padding:15px}
+.cart-item{display:flex;gap:10px;margin-bottom:12px;border-bottom:1px solid #eee;padding-bottom:10px}
+.cart-item img{width:60px;height:60px;border-radius:10px;object-fit:cover}
+.cart-foot{padding:18px;border-top:1px solid #eee}
+/* Modal */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:300;justify-content:center;align-items:center;padding:15px}
+.modal.open{display:flex}
+.modal-box{background:#fff;border-radius:15px;padding:25px;width:500px;max-width:100%;max-height:90vh;overflow:auto}
+.modal-box input,.modal-box textarea,.modal-box select{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:10px}
+.status{padding:4px 12px;border-radius:15px;font-size:12px;font-weight:600}
+.Received{background:#fff3cd}.Baking{background:#ffe0b2}.Ready{background:#bbdefb}.Out{background:#e1bee7}.Delivered{background:#c8e6c9}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;font-size:14px}
+th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+th{background:var(--brown);color:#fff}
+.stats{display:flex;gap:15px;flex-wrap:wrap;margin-bottom:20px}
+.stat{flex:1;min-width:150px;background:#fff;padding:20px;border-radius:12px;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.stat h3{font-size:26px;color:var(--brown)}
+footer{background:var(--brown);color:#fff;text-align:center;padding:25px;margin-top:40px}
+.track-box{background:#fff;padding:30px;border-radius:15px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,.07)}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">Bake<span>Ease</span> 🍰</div>
+<nav>
+<a onclick="showView('home')">Home</a>
+<a href="#menu">Menu</a>
+<a href="#customize">Customize</a>
+<a href="#offers">Offers</a>
+<a href="#track">Track Order</a>
+<a onclick="showView('admin')" style="background:#4E342E;color:#fff;padding:8px 16px;border-radius:20px">Admin</a>
+</nav>
+<button class="btn" onclick="toggleCart(true)">🛒 Cart (<span id="cartCount">0</span>)</button>
+</header>
+
+<!-- CUSTOMER VIEW -->
+<div id="homeView">
+<div class="hero">
+<div class="hero-text">
+<h1>Freshly Baked <span>Happiness</span> Delivered Home</h1>
+<p>Showcase, customize and order cakes online. Same-day delivery, easy UPI payment & live tracking for local bakeries.</p>
+<button class="btn" onclick="document.getElementById('menu').scrollIntoView()">Shop Now</button>
+<button class="btn btn-gold" onclick="document.getElementById('customize').scrollIntoView()">Customize Cake</button>
+<div class="badges"><div class="badge">⭐ 4.9 Rated</div><div class="badge">🚚 Same Day Delivery</div><div class="badge">🍞 Fresh Daily</div></div>
+</div>
+<div class="hero-img"><img src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=800" alt="Bakery"></div>
+</div>
+
+<div class="section" id="menu">
+<h2>Our Bestsellers</h2>
+<p class="sub">Managed by bakery admin - prices, photos & availability</p>
+<div class="grid" id="productGrid"></div>
+</div>
+
+<div class="section" id="offers">
+<h2>Today's Offers 🎉</h2>
+<p class="sub">Promotion module - handled by BBA team</p>
+<div class="offer-box">
+<div class="offer"><h3>50% OFF First Order</h3><p>Up to Rs.150 off</p><code>FIRST50</code><br><button class="btn btn-gold" onclick="applyCoupon('FIRST50')">Apply</button></div>
+<div class="offer"><h3>Festive 20% OFF</h3><p>On all 1kg+ cakes</p><code>FESTIVE20</code><br><button class="btn" style="background:#fff;color:#FF6B8B" onclick="applyCoupon('FESTIVE20')">Apply</button></div>
+<div class="offer"><h3>Free Delivery</h3><p>On orders above Rs.499</p><code>FREEDEL</code><br><button class="btn btn-gold" onclick="applyCoupon('FREEDEL')">Apply</button></div>
+</div>
+</div>
+
+<div class="section" id="customize">
+<h2>Design Your Own Cake 🎂</h2>
+<p class="sub">Choose flavor, size, topping & message - live price</p>
+<div class="custom-box">
+<div class="custom-form">
+<label>Flavor</label>
+<select id="cFlavor" onchange="calcCustom()"><option value="0">Chocolate (+ Rs.0)</option><option value="100">Red Velvet (+ Rs.100)</option><option value="80">Butterscotch (+ Rs.80)</option><option value="120">Pineapple (+ Rs.120)</option><option value="150">Photo Cake (+ Rs.150)</option></select>
+<label>Size</label>
+<select id="cSize" onchange="calcCustom()"><option value="499">0.5 Kg - Rs.499</option><option value="899">1 Kg - Rs.899</option><option value="1699">2 Kg - Rs.1699</option></select>
+<label>Topping</label>
+<select id="cTop" onchange="calcCustom()"><option value="0">No Extra</option><option value="99">Choco Chips +99</option><option value="149">Dry Fruits +149</option><option value="199">Fresh Strawberries +199</option></select>
+<label>Cake Message</label>
+<input id="cMsg" placeholder="e.g. Happy Birthday Aisha" oninput="calcCustom()">
+</div>
+<div class="preview">
+<h3 id="previewText">Chocolate Cake - 0.5 Kg</h3>
+<p id="previewMsg" style="color:#FF6B8B">""</p>
+<div id="customPrice">Rs.499</div>
+<button class="btn" onclick="addCustomToCart()">Add Custom Cake to Cart</button>
+</div>
+</div>
+</div>
+
+<div class="section" id="track">
+<h2>Track Your Order 📦</h2>
+<div class="track-box">
+<input id="trackInput" placeholder="Enter Order ID e.g. BE-1234" style="padding:12px;width:300px;max-width:80%;border:1px solid #ddd;border-radius:10px">
+<button class="btn" onclick="trackOrder()">Track</button>
+<div id="trackResult" style="margin-top:20px"></div>
+</div>
+</div>
+
+<div class="section">
+<h2>What Customers Say ❤️</h2>
+<p class="sub">Rating & feedback module helps bakery promotion</p>
+<div class="grid">
+<div class="card"><div class="card-body">⭐⭐⭐⭐⭐<p>"Ordered custom photo cake, delivered in 3 hours. Tracking was super easy!"</p><b>- Priya S.</b></div></div>
+<div class="card"><div class="card-body">⭐⭐⭐⭐⭐<p>"Best red velvet in town. Used FIRST50 and got huge discount."</p><b>- Rahul M.</b></div></div>
+<div class="card"><div class="card-body">⭐⭐⭐⭐☆<p>"Admin updated status live: Baking > Ready > Delivered. Very professional."</p><b>- Sneha K.</b></div></div>
+</div>
+</div>
+</div>
+
+<!-- ADMIN VIEW -->
+<div id="adminView" style="display:none" class="section">
+<h2>Bakery Admin Dashboard 🧑‍🍳</h2>
+<p class="sub">Manage products, orders, payments & delivery status</p>
+<button class="btn" onclick="showView('home')">← Back to Website</button><br><br>
+<div class="stats">
+<div class="stat"><h3 id="stOrders">0</h3><p>Total Orders</p></div>
+<div class="stat"><h3 id="stRevenue">Rs.0</h3><p>Revenue</p></div>
+<div class="stat"><h3 id="stPending">0</h3><p>Pending</p></div>
+</div>
+<h3>Add New Product</h3><br>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+<input id="pName" placeholder="Cake Name" style="padding:10px;border:1px solid #ddd;border-radius:8px">
+<input id="pPrice" type="number" placeholder="Price" style="padding:10px;border:1px solid #ddd;border-radius:8px">
+<button class="btn" onclick="addProduct()">+ Add</button>
+</div>
+<table>
+<thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead>
+<tbody id="orderTable"></tbody>
+</table>
+</div>
+
+<!-- CART -->
+<div id="cartSidebar">
+<div class="cart-head"><b>Your Cart</b><button onclick="toggleCart(false)" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer">✕</button></div>
+<div class="cart-items" id="cartItems"></div>
+<div class="cart-foot">
+<input id="coupon" placeholder="Coupon code (try FIRST50)" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;margin-bottom:10px">
+<p>Subtotal: <b id="subTotal">Rs.0</b></p>
+<p>Discount: <b id="discount" style="color:green">-Rs.0</b></p>
+<h3>Total: <span id="grandTotal">Rs.0</span></h3><br>
+<button class="btn" style="width:100%" onclick="openCheckout()">Checkout →</button>
+</div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="modal" id="checkoutModal">
+<div class="modal-box">
+<h2>Checkout 🧾</h2>
+<input id="custName" placeholder="Your Name">
+<input id="custPhone" placeholder="Phone Number">
+<textarea id="custAddr" placeholder="Delivery Address"></textarea>
+<label><input type="radio" name="pay" value="UPI" checked> UPI</label>
+<label><input type="radio" name="pay" value="Card"> Card</label>
+<label><input type="radio" name="pay" value="COD"> Cash on Delivery</label>
+<h3 style="margin-top:10px">Payable: <span id="payAmount">Rs.0</span></h3><br>
+<button class="btn" style="width:100%" onclick="placeOrder()">Place Order</button>
+<button onclick="document.getElementById('checkoutModal').classList.remove('open')" style="width:100%;margin-top:10px;background:none;border:none;cursor:pointer">Cancel</button>
+</div>
+</div>
+
+<footer>BakeEase © 2026 | CSE + BBA + B.Com Mini Project | Made with ❤️ for local bakeries</footer>
+
+<script>
+let products = JSON.parse(localStorage.getItem('bake_products')) || [
+{name:"Chocolate Truffle", price:549, img:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500", tag:"Bestseller"},
+{name:"Red Velvet Cake", price:649, img:"https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=500", tag:"20% OFF"},
+{name:"Strawberry Cake", price:599, img:"https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=500", tag:"New"},
+{name:"Butter Croissant (4pc)", price:199, img:"https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=500", tag:"Fresh"},
+{name:"Choco Cupcakes (6pc)", price:299, img:"https://images.unsplash.com/photo-1606890737304-57a1ca8a5b62?w=500", tag:"Combo"},
+{name:"Fresh Milk Bread", price:99, img:"https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500", tag:"Daily"},
+{name:"Berry Celebration Cake", price:899, img:"https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=500", tag:"Premium"},
+{name:"Vanilla Celebration", price:749, img:"https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500", tag:"Customizable"}
+];
+let cart = JSON.parse(localStorage.getItem('bake_cart')) || [];
+let orders = JSON.parse(localStorage.getItem('bake_orders')) || [];
+let activeCoupon = "";
+
+function save(){localStorage.setItem('bake_products',JSON.stringify(products));localStorage.setItem('bake_cart',JSON.stringify(cart));localStorage.setItem('bake_orders',JSON.stringify(orders));}
+
+function renderProducts(){
+document.getElementById('productGrid').innerHTML = products.map((p,i)=>`
+<div class="card"><span class="tag">${p.tag||'Fresh'}</span>
+<img src="${p.img}"><div class="card-body">
+<h3>${p.name}</h3><div class="price">Rs.${p.price}</div>
+<div>⭐ 4.8 | 500+ ordered</div><br>
+<button class="btn" style="width:100%" onclick="addToCart(${i})">Add to Cart</button>
+</div></div>`).join('');
+}
+function addToCart(i){cart.push(products[i]);save();renderCart();toggleCart(true);}
+function calcCustom(){
+let f=document.getElementById('cFlavor');let s=document.getElementById('cSize');let t=document.getElementById('cTop');
+let total=parseInt(s.value)+parseInt(f.value)+parseInt(t.value);
+document.getElementById('customPrice').innerText='Rs.'+total;
+document.getElementById('previewText').innerText=f.options[f.selectedIndex].text.split('(')[0]+' - '+s.options[s.selectedIndex].text.split('-')[0];
+document.getElementById('previewMsg').innerText='"'+document.getElementById('cMsg').value+'"';
+return total;
+}
+function addCustomToCart(){
+let total=calcCustom();
+let name="Custom: "+document.getElementById('previewText').innerText;
+cart.push({name,price:total,img:"https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500",tag:"Custom"});
+save();renderCart();toggleCart(true);
+}
+function toggleCart(open){document.getElementById('cartSidebar').classList.toggle('open',open);renderCart();}
+function getTotals(){
+let sub=cart.reduce((a,c)=>a+c.price,0);let disc=0;
+if(activeCoupon==="FIRST50") disc=Math.min(Math.round(sub*0.5),150);
+if(activeCoupon==="FESTIVE20") disc=Math.round(sub*0.2);
+if(activeCoupon==="FREEDEL" && sub>499) disc=50;
+return{sub,disc,total:sub-disc};
+}
+function renderCart(){
+document.getElementById('cartCount').innerText=cart.length;
+document.getElementById('cartItems').innerHTML=cart.length?cart.map((c,i)=>`
+<div class="cart-item"><img src="${c.img}"><div><b>${c.name}</b><br>Rs.${c.price}<br><button onclick="removeCart(${i})" style="color:red;border:none;background:none;cursor:pointer">Remove</button></div></div>`).join(''):'<p style="text-align:center;color:#888">Cart empty. Add some cakes! 🍰</p>';
+let t=getTotals();
+document.getElementById('subTotal').innerText='Rs.'+t.sub;
+document.getElementById('discount').innerText='-Rs.'+t.disc;
+document.getElementById('grandTotal').innerText='Rs.'+t.total;
+}
+function removeCart(i){cart.splice(i,1);save();renderCart();}
+function applyCoupon(code){activeCoupon=code;document.getElementById('coupon').value=code;renderCart();alert(code+" applied!");}
+function openCheckout(){
+if(!cart.length){alert("Cart is empty!");return;}
+toggleCart(false);
+document.getElementById('payAmount').innerText='Rs.'+getTotals().total;
+document.getElementById('checkoutModal').classList.add('open');
+}
+function placeOrder(){
+let name=document.getElementById('custName').value;
+let phone=document.getElementById('custPhone').value;
+let addr=document.getElementById('custAddr').value;
+if(!name||!phone||!addr){alert("Please fill name, phone & address");return;}
+let pay=document.querySelector('input[name="pay"]:checked').value;
+let t=getTotals();
+let id='BE-'+Math.floor(1000+Math.random()*9000);
+orders.unshift({id,customer:name+" ("+phone+")",address:addr,items:cart.map(c=>c.name).join(', '),total:t.total,payment:pay,status:'Received',date:new Date().toLocaleString()});
+cart=[];activeCoupon="";save();renderCart();
+document.getElementById('checkoutModal').classList.remove('open');
+alert("Order Placed! Your Order ID is "+id+" . Use it to Track.");
+document.getElementById('trackInput').value=id;
+document.getElementById('track').scrollIntoView();trackOrder();
+}
+function trackOrder(){
+let id=document.getElementById('trackInput').value.trim();
+let o=orders.find(x=>x.id===id);
+document.getElementById('trackResult').innerHTML=o?`<h3>Order ${o.id} - <span class="status ${o.status.split(' ')[0]}">${o.status}</span></h3><p>${o.items}</p><p><b>Total Rs.${o.total} | ${o.payment}</b></p><p>Received → Baking → Ready → Out for Delivery → Delivered</p>`:`<p style="color:red">Order not found. Check ID.</p>`;
+}
+function showView(v){
+document.getElementById('homeView').style.display=v==='home'?'block':'none';
+document.getElementById('adminView').style.display=v==='admin'?'block':'none';
+if(v==='admin') renderAdmin();
+window.scrollTo(0,0);
+}
+function renderAdmin(){
+document.getElementById('stOrders').innerText=orders.length;
+document.getElementById('stRevenue').innerText='Rs.'+orders.reduce((a,o)=>a+o.total,0);
+document.getElementById('stPending').innerText=orders.filter(o=>o.status!=='Delivered').length;
+document.getElementById('orderTable').innerHTML=orders.length?orders.map((o,i)=>`<tr><td><b>${o.id}</b><br><small>${o.date}</small></td><td>${o.customer}</td><td>${o.items}</td><td>Rs.${o.total}</td><td>${o.payment}</td><td><select onchange="updateStatus(${i},this.value)">${['Received','Baking','Ready','Out for Delivery','Delivered'].map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select></td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center">No orders yet</td></tr>';
+}
+function updateStatus(i,val){orders[i].status=val;save();renderAdmin();}
+function addProduct(){
+let n=document.getElementById('pName').value;let p=parseInt(document.getElementById('pPrice').value);
+if(!n||!p){alert("Enter name & price");return;}
+products.push({name:n,price:p,img:"https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=500",tag:"New"});
+save();renderProducts();alert("Product added!");
+}
+document.getElementById('coupon').addEventListener('change',e=>{activeCoupon=e.target.value;renderCart();});
+renderProducts();renderCart();calcCustom();
+</script>
+</body>
+</html>
