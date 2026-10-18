@@ -1,19 +1,4 @@
-Perfect, let's start building. For your class demo, we will build **Version 1 - Working Prototype** with simple technology that you can run without any installation.
 
-**Tech we will use now:** HTML + CSS + JavaScript + LocalStorage (as database). Later we can shift to React + Firebase.
-
-What you will get today: Home + Menu + Offers + Cake Customizer + Cart + Checkout + Order Tracking + Admin Dashboard - all in 1 website.
-
-### Step 1: Create the website in 2 minutes
-
-1. Create a folder on your laptop named `bakery-website`
-2. Open VS Code > New File > Save as `index.html` inside that folder
-3. Copy-paste the full code below into it
-4. Double-click the file to open in Chrome. Done!
-
-Copy this entire code:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
